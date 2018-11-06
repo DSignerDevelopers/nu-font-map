@@ -1,0 +1,26 @@
+.font-map-home-wrapper {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+}
+
+.font-map-home-wrapper
+.font-map-option {
+    position: absolute;
+    top: 40px;
+    left: 40px;
+    width: 400px;
+    height: 300px;
+}
+
+.font-map-home-wrapper
+.font-detail {
+
+}
+
+.font-map-home-wrapper
+.font-map {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+}
