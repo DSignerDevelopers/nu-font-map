@@ -22,7 +22,14 @@
 
             </div>
             <div id="fontMap" class="font-map">
-                <svg></svg>
+              <svg></svg>
+            </div>
+            <div id="toolTip" class="tool-tip">
+              <el-card>
+                <div slot="header" class="clearfix">
+                  <span>ee</span>
+                </div>
+              </el-card>
             </div>
         </div>
     </div>

@@ -24,3 +24,11 @@
     padding: 0;
     height: 100vh;
 }
+
+.tool-tip {
+    position: absolute;
+    width: 200px;
+    height: 100px;
+    padding: 10px;
+    font-size: 30px;
+}

@@ -2,6 +2,8 @@ import * as d3 from '../../../node_modules/d3';
 
 // svg object at root.
 let svg = {};
+let tooltip = {};
+let scale = {};
 
 const fetchData = function fetchData(condition) {
   return new Promise((resolve, reject) => {
@@ -26,11 +28,41 @@ const drawMap = function drawMap(data) {
     .append('text');
 
   // add text sample node
-  text.attr('x', d => d.x)
-    .attr('y', d => d.y)
+  text.attr('x', d => scale(d.x))
+    .attr('y', d => scale(d.y))
     .text('A')
+    .attr('text-anchor', 'middle')
     .attr('font-family', d => d.fontName)
+    .attr('font-style', d => d.style)
+    .attr('font-weight', d => d.weight)
+    .attr('width', '30px')
+    .attr('height', '30px')
     .attr('font-size', '40px');
+
+  // add tooltip
+  text.on('mouseover', (d) => {
+    tooltip.transition()
+      .duration(200)
+      .style('opacity', 1);
+    tooltip
+      .style('left', `${d3.event.pageX - 100}px`)
+      .style('top', `${d3.event.pageY - 150}px`)
+      .select('div.el-card')
+      .select('div.el-card__header')
+      .select('div.clearfix')
+      .select('span')
+      .html(d.fontName)
+      .style('font-family', d.fontName)
+      .style('font-style', d.style)
+      .style('font-weight', d.weight);
+  }).on('mouseout', () => {
+    tooltip
+      .style('left', '-200px')
+      .style('top', '-100px')
+      .transition()
+      .duration(50)
+      .style('opacity', 0);
+  });
 };
 
 // initialize d3 map with zoom and background
@@ -42,6 +74,18 @@ const init = function init() {
     .select('div.font-map-home-wrapper')
     .select('#fontMap')
     .select('svg');
+
+  // initialize tool tip
+  tooltip = d3.select('body')
+    .select('#app')
+    .select('#font-map-home')
+    .select('div.font-map-home-wrapper')
+    .select('#toolTip');
+
+  // initialize linear scale
+  scale = d3.scaleLinear()
+    .domain([0, 1920])
+    .range([0, 1920]);
 
   const svgInit = svg
     .attr('width', '100%')
