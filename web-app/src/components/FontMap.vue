@@ -4,6 +4,9 @@
             <div id="fontMapOption" class="font-map-option">
                 <el-card>
                     <el-form ref="optionForm" :model="optionForm" label-width="120px">
+                        <el-form-item label="Text Sample">
+                            <el-input v-model="optionForm.textSample"></el-input>
+                        </el-form-item>
                         <el-form-item label="Map Option">
                             <el-select v-model="optionForm.condition" placeholder="Select">
                                 <el-option
@@ -44,15 +47,17 @@ export default {
   data() {
     return {
       optionForm: {
-        condition: 'combined',
+        condition: 'weight',
+        textSample: 'A',
       },
-      conditionList: ['slant', 'weight', 'combined'],
+      conditionList: ['slant', 'weight'],
     };
   },
   methods: {
     // reset map to initial setting
     refresh() {
-      this.optionForm.condition = 'combined';
+      this.optionForm.condition = 'weight';
+      this.optionForm.textSample = 'A';
       FontMapD3.refresh();
     },
   },
@@ -65,7 +70,7 @@ export default {
         FontMapD3.clear();
         console.log(newOption.condition); // eslint-disable-line no-console
         FontMapD3.fetchData(newOption.condition).then((datapoints) => {
-          FontMapD3.drawMap(datapoints);
+          FontMapD3.drawMap(datapoints, newOption.textSample);
         }).catch((err) => {
           throw (err);
         });

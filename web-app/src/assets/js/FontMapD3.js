@@ -19,18 +19,19 @@ const fetchData = function fetchData(condition) {
 };
 
 // draw font map
-const drawMap = function drawMap(data) {
-  const text = svg
+const drawMap = function drawMap(data, stext) {
+  const area = svg
     .select('g')
     .selectAll('.fontNode')
     .data(data)
-    .enter()
-    .append('text');
+    .enter();
 
   // add text sample node
-  text.attr('x', d => scale(d.x))
-    .attr('y', d => scale(d.y))
-    .text('A')
+  area
+    .append('text')
+    .attr('x', d => scale(d.x))
+    .attr('y', d => scale(d.y) - 180)
+    .text(stext)
     .attr('text-anchor', 'middle')
     .attr('font-family', d => d.fontName)
     .attr('font-style', d => d.style)
@@ -39,8 +40,15 @@ const drawMap = function drawMap(data) {
     .attr('height', '30px')
     .attr('font-size', '40px');
 
+  const circle = area
+    .append('circle')
+    .attr('cx', d => scale(d.x))
+    .attr('cy', d => scale(d.y) - 200)
+    .attr('r', 15)
+    .style('opacity', 0);
+
   // add tooltip
-  text.on('mouseover', (d) => {
+  circle.on('mouseover', (d) => {
     tooltip.transition()
       .duration(200)
       .style('opacity', 1);
@@ -84,8 +92,8 @@ const init = function init() {
 
   // initialize linear scale
   scale = d3.scaleLinear()
-    .domain([0, 1920])
-    .range([0, 1920]);
+    .domain([-20, 15])
+    .range([100, 1600]);
 
   const svgInit = svg
     .attr('width', '100%')
@@ -108,8 +116,8 @@ const init = function init() {
     .attr('height', '1080')
     .attr('fill', '#EDF8F6');
 
-  fetchData('combined').then((datapoints) => {
-    drawMap(datapoints);
+  fetchData('weight').then((datapoints) => {
+    drawMap(datapoints, 'A');
   }).catch((err) => {
     throw (err);
   });
@@ -124,8 +132,8 @@ const clear = function clear() {
 // reset d3 view
 const refresh = function refresh() {
   clear();
-  fetchData('combined').then((datapoints) => {
-    drawMap(datapoints);
+  fetchData('weight').then((datapoints) => {
+    drawMap(datapoints, 'A');
   }).catch((err) => {
     throw (err);
   });
